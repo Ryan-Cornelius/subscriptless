@@ -3,12 +3,9 @@ const API_KEY = 'AIzaSyDVdgYyOLvEmCCjmNnn7tL7nBdtmQzwd-o'
 const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest'];
 const SCOPES = 'https://www.googleapis.com/auth/youtube.readonly';
 
-const loginBtn = $('#login')
+$('#execute').click(execute())
 
-////////
-//AUTH//
-////////
-let GoogleAuth;
+var GoogleAuth;
 function handleClientLoad() {
   // Load the API's client and auth2 modules.
   // Call the initClient function after the modules load.
@@ -16,9 +13,6 @@ function handleClientLoad() {
 }
 
 function initClient() {
-  // Retrieve the discovery document for version 3 of YouTube Data API.
-  // In practice, your app can retrieve one or more discovery documents.
-
   // Initialize the gapi.client object, which app uses to make API requests.
   // Get API key and client ID from API Console.
   // 'scope' field specifies space-delimited list of access scopes.
@@ -43,7 +37,7 @@ function initClient() {
       handleAuthClick();
     }); 
     $('#revoke-access-button').click(function() {
-      revokeAccess();
+        GoogleAuth.disconnect();
     }); 
   });
 }
@@ -58,20 +52,16 @@ function handleAuthClick() {
   }
 }
 
-function revokeAccess() {
-  GoogleAuth.disconnect();
-}
-
 function setSigninStatus(isSignedIn) {
   var user = GoogleAuth.currentUser.get();
   var isAuthorized = user.hasGrantedScopes(SCOPES);
   if (isAuthorized) {
-    loginBtn.html('Sign out');
+    $('#sign-in-or-out-button').html('Sign out');
     $('#revoke-access-button').css('display', 'inline-block');
     $('#auth-status').html('You are currently signed in and have granted ' +
         'access to this app.');
   } else {
-    loginBtn.html('Sign In/Authorize');
+    $('#sign-in-or-out-button').html('Sign In/Authorize');
     $('#revoke-access-button').css('display', 'none');
     $('#auth-status').html('You have not authorized this app or you are ' +
         'signed out.');
@@ -81,3 +71,15 @@ function setSigninStatus(isSignedIn) {
 function updateSigninStatus(isSignedIn) {
   setSigninStatus();
 }
+
+function execute() {
+    return gapi.client.youtube.subscriptions.list({
+      "part": "snippet,contentDetails",
+      "mine": true
+    })
+        .then(function(response) {
+                // Handle the results here (response.result has the parsed body).
+                console.log("Response", response);
+              },
+              function(err) { console.error("Execute error", err); });
+  }
