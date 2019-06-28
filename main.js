@@ -34,12 +34,12 @@ function initClient() {
     GoogleAuth.isSignedIn.listen(updateSigninStatus);
 
     // Handle initial sign-in state. (Determine if user is already signed in.)
-    let user = GoogleAuth.currentUser.get();
+    var user = GoogleAuth.currentUser.get();
     setSigninStatus();
 
     // Call handleAuthClick function when user clicks on
     //      "Sign In/Authorize" button.
-    loginBtn.click(function() {
+    $('#sign-in-or-out-button').click(function() {
       handleAuthClick();
     }); 
     $('#revoke-access-button').click(function() {
