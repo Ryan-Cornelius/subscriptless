@@ -15,8 +15,12 @@
 </head>
 <body>
     <script>
+        const CLIENT_ID = "553577018374-tid9bjnf74hptukaohvphtlr5fhcgs87.apps.googleusercontent.com";
+        const API_KEY = 'AIzaSyDVdgYyOLvEmCCjmNnn7tL7nBdtmQzwd-o'
+        const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest'];
+        const SCOPES = 'https://www.googleapis.com/auth/youtube.readonly';
+
         var GoogleAuth;
-        var SCOPE = 'https://www.googleapis.com/auth/youtube.force-ssl';
         function handleClientLoad() {
           // Load the API's client and auth2 modules.
           // Call the initClient function after the modules load.
@@ -32,10 +36,10 @@
           // Get API key and client ID from API Console.
           // 'scope' field specifies space-delimited list of access scopes.
           gapi.client.init({
-              'apiKey': 'YOUR_API_KEY',
-              'discoveryDocs': [discoveryUrl],
-              'clientId': 'YOUR_CLIENT_ID',
-              'scope': SCOPE
+              'apiKey': API_KEY,
+              'discoveryDocs': DISCOVERY_DOCS,
+              'clientId': CLIENT_ID,
+              'scope': SCOPES
           }).then(function () {
             GoogleAuth = gapi.auth2.getAuthInstance();
       
@@ -73,7 +77,7 @@
       
         function setSigninStatus(isSignedIn) {
           var user = GoogleAuth.currentUser.get();
-          var isAuthorized = user.hasGrantedScopes(SCOPE);
+          var isAuthorized = user.hasGrantedScopes(SCOPES);
           if (isAuthorized) {
             $('#sign-in-or-out-button').html('Sign out');
             $('#revoke-access-button').css('display', 'inline-block');
