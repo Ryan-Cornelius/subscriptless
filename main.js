@@ -73,10 +73,7 @@ function updateSigninStatus(isSignedIn) {
 }
 
 function execute() {
-    return gapi.client.youtube.subscriptions.list({
-      "part": "snippet,contentDetails",
-      "mine": true
-    })
+    var request = gapi.client.youtube.channels.list({'part': 'snippet', 'mine': 'true'})
         .then(function(response) {
                 // Handle the results here (response.result has the parsed body).
                 console.log("Response", response);
